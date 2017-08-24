@@ -1,3 +1,4 @@
+/*
 package com.lypank.combat;
 
 import com.lypank.combat.calculator.formulas.EPF;
@@ -17,10 +18,7 @@ public class Main
 
         int[][] enchantments = armor.setEnchantments();
 
-
-
-
-
     }
 
 }
+*/
