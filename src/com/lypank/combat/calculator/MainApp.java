@@ -1,8 +1,14 @@
 package com.lypank.combat.calculator;
 
+import com.lypank.combat.calculator.model.Armor;
+import com.lypank.combat.calculator.view.CalculatorDisplayController;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -61,6 +67,9 @@ public class MainApp extends Application
             AnchorPane calculatorDisplay = (AnchorPane)loader.load();
 
             rootLayout.setCenter(calculatorDisplay);
+
+            CalculatorDisplayController controller = loader.getController();
+            controller.setMainApp(this);
         }
         catch(IOException e)
         {
@@ -72,6 +81,7 @@ public class MainApp extends Application
     {
         launch(args);
     }
+
 
 
 }

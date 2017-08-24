@@ -6,12 +6,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="620.0" maxWidth="520.0" minHeight="620.0" minWidth="520.0" prefHeight="620.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="620.0" maxWidth="520.0" minHeight="620.0" minWidth="520.0" prefHeight="620.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lypank.combat.calculator.view.CalculatorDisplayController">
    <children>
       <AnchorPane prefHeight="100.0" prefWidth="520.0">
          <children>
-            <Label layoutX="14.0" layoutY="33.0" text="Combat Calculator" underline="true" AnchorPane.leftAnchor="20.0">
+            <Label fx:id="combatCalculator" layoutX="14.0" layoutY="33.0" text="Combat Calculator" underline="true" AnchorPane.leftAnchor="20.0">
                <font>
                   <Font size="24.0" />
                </font>
@@ -20,36 +19,36 @@
       </AnchorPane>
       <AnchorPane layoutY="35.0" prefHeight="200.0" prefWidth="520.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Label layoutX="14.0" layoutY="14.0" text="Helmet" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="20.0">
+            <Label fx:id="helmet" layoutX="14.0" layoutY="14.0" text="Helmet" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="20.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="25.0" layoutY="62.0" text="Chestplate" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="60.0">
+            <Label fx:id="chestplate" layoutX="25.0" layoutY="62.0" text="Chestplate" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="60.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="25.0" layoutY="106.0" text="Leggings" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="100.0">
+            <Label fx:id="leggings" layoutX="25.0" layoutY="106.0" text="Leggings" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="100.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label layoutX="25.0" layoutY="164.0" text="Boots" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="140.0">
+            <Label fx:id="boots" layoutX="25.0" layoutY="164.0" text="Boots" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="140.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <ChoiceBox layoutX="125.0" layoutY="17.0" prefHeight="31.0" prefWidth="61.0" AnchorPane.leftAnchor="125.0" />
-            <ChoiceBox layoutX="125.0" layoutY="57.0" prefHeight="31.0" prefWidth="61.0" AnchorPane.leftAnchor="125.0" />
-            <ChoiceBox layoutX="125.0" layoutY="97.0" prefHeight="31.0" prefWidth="61.0" AnchorPane.leftAnchor="125.0" />
-            <ChoiceBox layoutX="125.0" layoutY="137.0" prefHeight="31.0" prefWidth="61.0" AnchorPane.leftAnchor="125.0" />
+            <ChoiceBox fx:id="helmetMaterial" layoutX="125.0" layoutY="17.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
+            <ChoiceBox fx:id="chestplateMaterial" layoutX="125.0" layoutY="57.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
+            <ChoiceBox fx:id="leggingsMaterial" layoutX="125.0" layoutY="97.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
+            <ChoiceBox fx:id="bootsMaterial" layoutX="125.0" layoutY="137.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="520.0" AnchorPane.topAnchor="300.0" />
       <AnchorPane layoutY="119.0" prefHeight="90.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0">
          <children>
-            <Button layoutX="174.0" layoutY="20.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="173.0" text="Calculate">
+            <Button fx:id="calculate" layoutX="174.0" layoutY="20.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="173.0" text="Calculate">
                <font>
                   <Font size="18.0" />
                </font>
