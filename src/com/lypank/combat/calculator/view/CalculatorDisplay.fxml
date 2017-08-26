@@ -10,7 +10,7 @@
    <children>
       <AnchorPane prefHeight="100.0" prefWidth="520.0">
          <children>
-            <Label fx:id="combatCalculator" layoutX="14.0" layoutY="33.0" text="Combat Calculator" underline="true" AnchorPane.leftAnchor="20.0">
+            <Label layoutX="14.0" layoutY="33.0" text="Combat Calculator" underline="true" AnchorPane.leftAnchor="20.0">
                <font>
                   <Font size="24.0" />
                </font>
@@ -19,22 +19,22 @@
       </AnchorPane>
       <AnchorPane layoutY="35.0" prefHeight="200.0" prefWidth="520.0" AnchorPane.topAnchor="100.0">
          <children>
-            <Label fx:id="helmet" layoutX="14.0" layoutY="14.0" text="Helmet" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="20.0">
+            <Label layoutX="14.0" layoutY="14.0" text="Helmet" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="20.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="chestplate" layoutX="25.0" layoutY="62.0" text="Chestplate" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="60.0">
+            <Label layoutX="25.0" layoutY="62.0" text="Chestplate" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="60.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="leggings" layoutX="25.0" layoutY="106.0" text="Leggings" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="100.0">
+            <Label layoutX="25.0" layoutY="106.0" text="Leggings" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="100.0">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Label fx:id="boots" layoutX="25.0" layoutY="164.0" text="Boots" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="140.0">
+            <Label layoutX="25.0" layoutY="164.0" text="Boots" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="140.0">
                <font>
                   <Font size="16.0" />
                </font>
@@ -48,7 +48,7 @@
       <AnchorPane prefHeight="200.0" prefWidth="520.0" AnchorPane.topAnchor="300.0" />
       <AnchorPane layoutY="119.0" prefHeight="90.0" prefWidth="520.0" AnchorPane.bottomAnchor="0.0">
          <children>
-            <Button fx:id="calculate" layoutX="174.0" layoutY="20.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="173.0" text="Calculate">
+            <Button layoutX="174.0" layoutY="20.0" mnemonicParsing="false" onAction="#calculateResults" onMouseClicked="#calculateResults" prefHeight="50.0" prefWidth="173.0" text="Calculate">
                <font>
                   <Font size="18.0" />
                </font>

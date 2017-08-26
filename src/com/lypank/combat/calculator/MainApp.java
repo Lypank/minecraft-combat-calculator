@@ -2,23 +2,43 @@ package com.lypank.combat.calculator;
 
 import com.lypank.combat.calculator.model.Armor;
 import com.lypank.combat.calculator.view.CalculatorDisplayController;
+import com.lypank.combat.calculator.view.CalculatorResultsController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class MainApp extends Application
 {
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private ObservableList<Armor> armorData = FXCollections.observableArrayList();
+
+    /*
+     * Adds basic sample data
+     */
+
+    public MainApp()
+    {
+        armorData.add(new Armor(new BigDecimal(0.04), new BigDecimal(0.12), new BigDecimal(0.08), new BigDecimal(0.04)));
+        armorData.add(new Armor(new BigDecimal(0.08), new BigDecimal(0.20), new BigDecimal(0.12), new BigDecimal(0.04)));
+        armorData.add(new Armor(new BigDecimal(0.08), new BigDecimal(0.20), new BigDecimal(0.16), new BigDecimal(0.04)));
+        armorData.add(new Armor(new BigDecimal(0.08), new BigDecimal(0.24), new BigDecimal(0.20), new BigDecimal(0.08)));
+        armorData.add(new Armor(new BigDecimal(0.12), new BigDecimal(0.32), new BigDecimal(0.24), new BigDecimal(0.12)));
+    }
+
+    public ObservableList<Armor> getArmorData()
+    {
+        return armorData;
+    }
 
     /*
      * Sets the primary stage
@@ -38,14 +58,14 @@ public class MainApp extends Application
         showCalculatorDisplay();
     }
 
-    public void initRootLayout()
+    private void initRootLayout()
     {
         try
         {
             //Create FXMLLoader and set the resource location for the root layout
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
-            rootLayout = (BorderPane)loader.load();
+            rootLayout = loader.load();
 
             //Define the scene's root layout
             Scene scene = new Scene(rootLayout);
@@ -58,13 +78,13 @@ public class MainApp extends Application
         }
     }
 
-    public void showCalculatorDisplay()
+    private void showCalculatorDisplay()
     {
         try
         {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/CalculatorDisplay.fxml"));
-            AnchorPane calculatorDisplay = (AnchorPane)loader.load();
+            AnchorPane calculatorDisplay = loader.load();
 
             rootLayout.setCenter(calculatorDisplay);
 
@@ -77,11 +97,36 @@ public class MainApp extends Application
         }
     }
 
+    public boolean showCalculatorResults(Armor armor)
+    {
+        try
+        {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(MainApp.class.getResource("view/CalculatorResults.fxml"));
+            AnchorPane page = loader.load();
+
+            Stage resultsStage = new Stage();
+            resultsStage.setTitle("Combat Results");
+            resultsStage.initModality(Modality.WINDOW_MODAL);
+            resultsStage.initOwner(primaryStage);
+
+            CalculatorResultsController controller = loader.getController();
+            controller.setResultsStage(resultsStage);
+
+            controller.setDR(armor);
+
+            resultsStage.showAndWait();
+            return true;
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static void main(String[] args)
     {
         launch(args);
     }
-
-
-
 }

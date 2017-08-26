@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="400.0" maxWidth="350.0" minHeight="400.0" minWidth="350.0" onMouseClicked="#handleClose" prefHeight="400.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.lypank.combat.calculator.view.CalculatorResultsController">
+   <children>
+      <AnchorPane maxHeight="200.0" maxWidth="350.0" minHeight="200.0" minWidth="350.0" prefHeight="200.0" prefWidth="350.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="20.0" layoutY="26.0" text="Damage Reduction Sources" underline="true" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="39.0" layoutY="64.0" text="Base DR: Armor" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="30.0" />
+            <Label layoutX="20.0" layoutY="100.0" prefHeight="21.0" prefWidth="165.0" text="Extra DR: Enchantments" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="30.0" />
+            <Label layoutX="14.0" layoutY="135.0" text="Extra DR: Potion Effect" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="30.0" />
+            <Label layoutX="14.0" layoutY="165.0" text="Extra DR: Blocking" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="30.0" />
+            <Label layoutX="24.0" layoutY="175.0" text="Total DR" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="30.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <Label fx:id="armorDR" layoutX="225.0" layoutY="64.0" text="Armor" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="225.0" />
+            <Label fx:id="enchantmentDR" layoutX="222.0" layoutY="90.0" text="Protection" AnchorPane.bottomAnchor="90.0" AnchorPane.leftAnchor="225.0" />
+            <Label fx:id="resistanceDR" layoutX="222.0" layoutY="125.0" text="Resistance" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="225.0" />
+            <Label fx:id="blockingDR" layoutX="222.0" layoutY="150.0" text="Blocking" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="225.0" />
+            <Label fx:id="totalDR" layoutX="218.0" layoutY="176.0" text="Total" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="225.0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <Button layoutX="131.0" layoutY="355.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="88.0" text="Close" />
+   </children>
+</AnchorPane>
