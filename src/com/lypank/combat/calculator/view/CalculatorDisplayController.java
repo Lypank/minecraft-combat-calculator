@@ -1,19 +1,17 @@
 package com.lypank.combat.calculator.view;
 
+import com.google.common.collect.ArrayTable;
+import com.google.common.collect.Lists;
 import com.lypank.combat.calculator.MainApp;
 import com.lypank.combat.calculator.model.Armor;
-import javafx.beans.binding.Binding;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 
 import java.math.BigDecimal;
-import java.util.Hashtable;
-import java.util.concurrent.Callable;
+import java.math.RoundingMode;
+import java.util.List;
 
 public class CalculatorDisplayController
 {
@@ -27,200 +25,94 @@ public class CalculatorDisplayController
     private ChoiceBox<String> bootsMaterial;
 
     private MainApp main;
-    private Armor suit = new Armor(null, null, null, null);
+    private Armor armor = new Armor(null, null, null, null);
+    private ArrayTable<String, String, BigDecimal> finalArmorTable;
 
     // Armor Types with the included value of that Armor
     // Armor is structured as [0] = Helmet [1] = Chestplate [2] = Leggings [3] = Boots
-    private final String[] MATERIALS = {"None", "Leather", "Gold", "Chain", "Iron", "Diamond"};
+    //private final String ARMOR_PIECES[] = {"Helmet", "Chestplate", "Leggings", "Boots"};
+    //private final String[] MATERIALS = {"None", "Leather", "Gold", "Chain", "Iron", "Diamond"};
     private final BigDecimal[] LEATHER = {new BigDecimal(0.04), new BigDecimal(0.12), new BigDecimal(0.08), new BigDecimal(0.04)};
     private final BigDecimal[] GOLD = {new BigDecimal(0.08), new BigDecimal(0.20), new BigDecimal(0.12), new BigDecimal(0.04)};
     private final BigDecimal[] CHAIN = {new BigDecimal(0.08), new BigDecimal(0.20), new BigDecimal(0.16), new BigDecimal(0.04)};
     private final BigDecimal[] IRON = {new BigDecimal(0.08), new BigDecimal(0.24), new BigDecimal(0.20), new BigDecimal(0.08)};
     private final BigDecimal[] DIAMOND = {new BigDecimal(0.12), new BigDecimal(0.32), new BigDecimal(0.24), new BigDecimal(0.12)};
 
+    private final List<String> MATERIALS = Lists.newArrayList("None", "Leather", "Gold", "Chain", "Iron", "Diamond");
+    private final List<String> ARMOR_PIECES = Lists.newArrayList("Helmet", "Chestplate", "Leggings", "Boots");
 
+    public ArrayTable<String, String, BigDecimal> setArmorTableValues()
+    {
+        ArrayTable<String, String, BigDecimal> armorTable = ArrayTable.create(MATERIALS, ARMOR_PIECES);
+
+        //Values for Armor Pieces if the material is: "None"
+        armorTable.put(MATERIALS.get(0), ARMOR_PIECES.get(0), BigDecimal.ZERO);
+        armorTable.put(MATERIALS.get(0), ARMOR_PIECES.get(1), BigDecimal.ZERO);
+        armorTable.put(MATERIALS.get(0), ARMOR_PIECES.get(2), BigDecimal.ZERO);
+        armorTable.put(MATERIALS.get(0), ARMOR_PIECES.get(3), BigDecimal.ZERO);
+
+        //Values for Armor Piece if material is: "Leather"
+        armorTable.put(MATERIALS.get(1), ARMOR_PIECES.get(0), LEATHER[0].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(1), ARMOR_PIECES.get(1), LEATHER[1].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(1), ARMOR_PIECES.get(2), LEATHER[2].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(1), ARMOR_PIECES.get(3), LEATHER[3].setScale(2, RoundingMode.HALF_UP));
+
+        //Values for Armor Piece if material is: "Gold"
+        armorTable.put(MATERIALS.get(2), ARMOR_PIECES.get(0), GOLD[0].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(2), ARMOR_PIECES.get(1), GOLD[1].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(2), ARMOR_PIECES.get(2), GOLD[2].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(2), ARMOR_PIECES.get(3), GOLD[3].setScale(2, RoundingMode.HALF_UP));
+
+        //Values for Armor Piece if material is: "Chain"
+        armorTable.put(MATERIALS.get(3), ARMOR_PIECES.get(0), CHAIN[0].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(3), ARMOR_PIECES.get(1), CHAIN[1].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(3), ARMOR_PIECES.get(2), CHAIN[2].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(3), ARMOR_PIECES.get(3), CHAIN[3].setScale(2, RoundingMode.HALF_UP));
+
+        //Values for Armor Piece if material is: "Iron"
+        armorTable.put(MATERIALS.get(4), ARMOR_PIECES.get(0), IRON[0].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(4), ARMOR_PIECES.get(1), IRON[1].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(4), ARMOR_PIECES.get(2), IRON[2].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(4), ARMOR_PIECES.get(3), IRON[3].setScale(2, RoundingMode.HALF_UP));
+
+        //Values for Armor Piece if material is: "Diamond"
+        armorTable.put(MATERIALS.get(5), ARMOR_PIECES.get(0), DIAMOND[0].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(5), ARMOR_PIECES.get(1), DIAMOND[1].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(5), ARMOR_PIECES.get(2), DIAMOND[2].setScale(2, RoundingMode.HALF_UP));
+        armorTable.put(MATERIALS.get(5), ARMOR_PIECES.get(3), DIAMOND[3].setScale(2, RoundingMode.HALF_UP));
+
+        return armorTable;
+    }
+
+    public BigDecimal[] getArmorTableValues(ChoiceBox<String> helmetMaterial, ChoiceBox<String> chestplateMaterial, ChoiceBox<String> leggingsMaterial, ChoiceBox<String> bootsMaterial)
+    {
+        String helmetIndex = helmetMaterial.getValue();
+        String chestplateIndex = chestplateMaterial.getValue();
+        String leggingsIndex = leggingsMaterial.getValue();
+        String bootsIndex = bootsMaterial.getValue();
+
+        BigDecimal helmetValue = finalArmorTable.get(helmetIndex, ARMOR_PIECES.get(0));
+        BigDecimal chestplateValue = finalArmorTable.get(chestplateIndex, ARMOR_PIECES.get(1));
+        BigDecimal leggingsValue = finalArmorTable.get(leggingsIndex, ARMOR_PIECES.get(2));
+        BigDecimal bootsValue = finalArmorTable.get(bootsIndex, ARMOR_PIECES.get(3));
+
+        /*
+        System.out.println(chestplateValue);
+        System.out.println(finalArmorTable.get(MATERIALS.get(0), ARMOR_PIECES.get(0)));
+        System.out.println(finalArmorTable.get("Leather", "Helmet"));
+        System.out.println(helmetValue);
+        System.out.println(finalArmorTable.at(0,0));
+        */
+
+        BigDecimal[] armorValues = {helmetValue, chestplateValue, leggingsValue, bootsValue};
+        return armorValues;
+    }
 
     public CalculatorDisplayController()
     {
 
     }
 
-
-    /*
-     * The following methods set the armor protection of that armor piece depending on the material found
-     * The material that is used in the formula is dependant on the GUI choice box selection
-     */
-
-    private BigDecimal helmetValue(ChoiceBox<String> helmetMaterial)
-    {
-        String chosenHelmetMaterial = helmetMaterial.getValue();
-
-        if(chosenHelmetMaterial.equals(MATERIALS[0]))
-        {
-            suit.setHelmetProtection(BigDecimal.ZERO);
-        }
-
-        else if(chosenHelmetMaterial.equals(MATERIALS[1]))
-        {
-            suit.setHelmetProtection(LEATHER[0].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenHelmetMaterial.equals(MATERIALS[2]))
-        {
-            suit.setHelmetProtection(GOLD[0].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenHelmetMaterial.equals(MATERIALS[3]))
-        {
-            suit.setHelmetProtection(CHAIN[0].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenHelmetMaterial.equals(MATERIALS[4]))
-        {
-            suit.setHelmetProtection(IRON[0].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenHelmetMaterial.equals(MATERIALS[5]))
-        {
-            suit.setHelmetProtection(DIAMOND[0].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else
-        {
-            System.out.println("Something's Wrong: Helmet Selection");
-        }
-
-        return suit.getHelmetProtection();
-    }
-
-    private BigDecimal chestplateValue(ChoiceBox<String> chestplateMaterial)
-    {
-        String chosenChestplateMaterial = chestplateMaterial.getValue();
-
-        if(chosenChestplateMaterial.equals(MATERIALS[0]))
-        {
-            suit.setChestplateProtection(BigDecimal.ZERO);
-        }
-
-        else if(chosenChestplateMaterial.equals(MATERIALS[1]))
-        {
-            suit.setChestplateProtection(LEATHER[1].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenChestplateMaterial.equals(MATERIALS[2]))
-        {
-            suit.setChestplateProtection(GOLD[1].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenChestplateMaterial.equals(MATERIALS[3]))
-        {
-            suit.setChestplateProtection(CHAIN[1].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenChestplateMaterial.equals(MATERIALS[4]))
-        {
-            suit.setChestplateProtection(IRON[1].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenChestplateMaterial.equals(MATERIALS[5]))
-        {
-            suit.setChestplateProtection(DIAMOND[1].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else
-        {
-            System.out.println("Something's Wrong: Chestplate Selection");
-        }
-
-        return suit.getChestplateProtection();
-    }
-
-    private BigDecimal leggingsValue(ChoiceBox<String> leggingsMaterial)
-    {
-        String chosenLeggingsMaterial = leggingsMaterial.getValue();
-
-        if(chosenLeggingsMaterial.equals(MATERIALS[0]))
-        {
-            suit.setLeggingsProtection(BigDecimal.ZERO);
-        }
-
-        else if(chosenLeggingsMaterial.equals(MATERIALS[1]))
-        {
-            suit.setLeggingsProtection(LEATHER[2].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenLeggingsMaterial.equals(MATERIALS[2]))
-        {
-            suit.setLeggingsProtection(GOLD[2].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenLeggingsMaterial.equals(MATERIALS[3]))
-        {
-            suit.setLeggingsProtection(CHAIN[2].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenLeggingsMaterial.equals(MATERIALS[4]))
-        {
-            suit.setLeggingsProtection(IRON[2].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenLeggingsMaterial.equals(MATERIALS[5]))
-        {
-            suit.setLeggingsProtection(DIAMOND[2].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else
-        {
-            System.out.println("Something's Wrong: Leggings Selection");
-        }
-
-        return suit.getLeggingsProtection();
-    }
-
-    private BigDecimal bootsValue(ChoiceBox<String> bootsMaterial)
-    {
-        String chosenBootsMaterial = bootsMaterial.getValue();
-
-        if(chosenBootsMaterial.equals(MATERIALS[0]))
-        {
-            suit.setBootsProtection(BigDecimal.ZERO);
-        }
-
-        else if(chosenBootsMaterial.equals(MATERIALS[1]))
-        {
-            suit.setBootsProtection(LEATHER[3].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenBootsMaterial.equals(MATERIALS[2]))
-        {
-            suit.setBootsProtection(GOLD[3].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenBootsMaterial.equals(MATERIALS[3]))
-        {
-            suit.setBootsProtection(CHAIN[3].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenBootsMaterial.equals(MATERIALS[4]))
-        {
-            suit.setBootsProtection(IRON[3].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else if(chosenBootsMaterial.equals(MATERIALS[5]))
-        {
-            suit.setBootsProtection(DIAMOND[3].setScale(2, BigDecimal.ROUND_HALF_UP));
-        }
-
-        else
-        {
-            System.out.println("Something's Wrong: Boots Selection");
-        }
-
-        return suit.getBootsProtection();
-    }
-
-
-    //Sets the default selected material for each possible armor piece
     @FXML
     private void initialize()
     {
@@ -237,25 +129,28 @@ public class CalculatorDisplayController
 
         bootsMaterial.setItems(materialsList);
         bootsMaterial.getSelectionModel().select(0);
+
+        finalArmorTable= setArmorTableValues();
     }
 
     @FXML
     private void calculateResults()
     {
-        suit.setHelmetProtection(helmetValue(helmetMaterial));
-        suit.setChestplateProtection(chestplateValue(chestplateMaterial));
-        suit.setLeggingsProtection(leggingsValue(leggingsMaterial));
-        suit.setBootsProtection(bootsValue(bootsMaterial));
+        BigDecimal[] armorValues = getArmorTableValues(helmetMaterial, chestplateMaterial, leggingsMaterial, bootsMaterial);
 
+        armor.setHelmetProtection(armorValues[0]);
+        armor.setChestplateProtection(armorValues[1]);
+        armor.setLeggingsProtection(armorValues[2]);
+        armor.setBootsProtection(armorValues[3]);
+
+
+        System.out.println(armor.getHelmetProtection());
+/*
         BigDecimal topHalf = suit.getHelmetProtection().add(suit.getChestplateProtection());
         BigDecimal bottomHalf = suit.getLeggingsProtection().add(suit.getBootsProtection());
         BigDecimal bothHalves = topHalf.add(bottomHalf);
-
-
-        System.out.println(topHalf + " " + bottomHalf);
-        System.out.println(bothHalves);
-
-        //main.showCalculatorResults(baseArmor);
+*/
+        main.showCalculatorResults(armor);
     }
 
     public void setMainApp(MainApp main)

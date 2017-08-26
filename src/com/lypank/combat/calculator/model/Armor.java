@@ -8,10 +8,8 @@ package com.lypank.combat.calculator.model;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.binding.Bindings;
 
 import java.math.BigDecimal;
-import java.util.concurrent.Callable;
 
 public class Armor
 {
@@ -32,7 +30,6 @@ public class Armor
         this.leggingsProtection = new SimpleObjectProperty<>(leggingsProtection);
         this.bootsProtection = new SimpleObjectProperty<>(bootsProtection);
     }
-
 
     public BigDecimal getHelmetProtection()
     {

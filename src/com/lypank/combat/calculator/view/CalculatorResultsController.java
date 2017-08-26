@@ -42,11 +42,6 @@ public class CalculatorResultsController
     public void setDR(Armor armor)
     {
         this.armor = armor;
-
-
-
-
-
     }
 
     @FXML
