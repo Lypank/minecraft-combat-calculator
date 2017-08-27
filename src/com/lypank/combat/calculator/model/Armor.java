@@ -17,6 +17,7 @@ public class Armor
     private final ObjectProperty<BigDecimal> chestplateProtection;
     private final ObjectProperty<BigDecimal> leggingsProtection;
     private final ObjectProperty<BigDecimal> bootsProtection;
+    private final ObjectProperty<BigDecimal> armorProtection;
 
     public Armor()
     {
@@ -29,6 +30,21 @@ public class Armor
         this.chestplateProtection = new SimpleObjectProperty<>(chestplateProtection);
         this.leggingsProtection = new SimpleObjectProperty<>(leggingsProtection);
         this.bootsProtection = new SimpleObjectProperty<>(bootsProtection);
+
+        this.armorProtection = new SimpleObjectProperty<>(BigDecimal.ZERO);
+    }
+
+    public BigDecimal getArmorProtection()
+    {
+        return armorProtection.get();
+    }
+    public void setArmorProection(BigDecimal armorProtection)
+    {
+        this.armorProtection.setValue(getHelmetProtection().add(getChestplateProtection().add(getLeggingsProtection().add(getBootsProtection()))));
+    }
+    public ObjectProperty<BigDecimal> armorProtectionProperty()
+    {
+        return armorProtection;
     }
 
     public BigDecimal getHelmetProtection()

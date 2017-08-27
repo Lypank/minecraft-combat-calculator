@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayTable;
 import com.google.common.collect.Lists;
 import com.lypank.combat.calculator.MainApp;
 import com.lypank.combat.calculator.model.Armor;
+import com.lypank.combat.calculator.model.Protection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class CalculatorDisplayController
 {
+    //Armor Selection
     @FXML
     private ChoiceBox<String> helmetMaterial;
     @FXML
@@ -24,24 +26,48 @@ public class CalculatorDisplayController
     @FXML
     private ChoiceBox<String> bootsMaterial;
 
+    //Protection Values
+    @FXML
+    private ChoiceBox<String> helmetProtection;
+    @FXML
+    private ChoiceBox<String> chestplateProtection;
+    @FXML
+    private ChoiceBox<String> leggingsProtection;
+    @FXML
+    private ChoiceBox<String> bootsProtection;
+
     private MainApp main;
+
     private Armor armor = new Armor(null, null, null, null);
+    private Protection protection = new Protection(null);
+
     private ArrayTable<String, String, BigDecimal> finalArmorTable;
+    private ArrayTable<String, String, Double> finalProtectionTable;
 
     // Armor Types with the included value of that Armor
     // Armor is structured as [0] = Helmet [1] = Chestplate [2] = Leggings [3] = Boots
-    //private final String ARMOR_PIECES[] = {"Helmet", "Chestplate", "Leggings", "Boots"};
-    //private final String[] MATERIALS = {"None", "Leather", "Gold", "Chain", "Iron", "Diamond"};
     private final BigDecimal[] LEATHER = {new BigDecimal(0.04), new BigDecimal(0.12), new BigDecimal(0.08), new BigDecimal(0.04)};
     private final BigDecimal[] GOLD = {new BigDecimal(0.08), new BigDecimal(0.20), new BigDecimal(0.12), new BigDecimal(0.04)};
     private final BigDecimal[] CHAIN = {new BigDecimal(0.08), new BigDecimal(0.20), new BigDecimal(0.16), new BigDecimal(0.04)};
     private final BigDecimal[] IRON = {new BigDecimal(0.08), new BigDecimal(0.24), new BigDecimal(0.20), new BigDecimal(0.08)};
     private final BigDecimal[] DIAMOND = {new BigDecimal(0.12), new BigDecimal(0.32), new BigDecimal(0.24), new BigDecimal(0.12)};
 
+    // Protection Type Modifiers
+    // Available Protection Levels
+    private final BigDecimal PROTECTION_MODIFIER = new BigDecimal(0.75);
+    final double FIRE_PROTECTION_MODIFIER = 1.25;
+    final double PROJECTILE_PROTECTION_MODIFER = 1.5;
+    final double BLAST_PROTECTION_MODIFIER = 1.5;
+    final double FEATHER_FALLING_MODIFIER = 2.5;
+    private final BigDecimal MIN_MODIFIER = new BigDecimal(0.5);
+    private final BigDecimal MAX_MODIFIER = new BigDecimal(1);
+    private final List<String> PROTECTION_LEVELS = Lists.newArrayList("~", "I", "II", "III", "IV", "V");
+
     private final List<String> MATERIALS = Lists.newArrayList("None", "Leather", "Gold", "Chain", "Iron", "Diamond");
     private final List<String> ARMOR_PIECES = Lists.newArrayList("Helmet", "Chestplate", "Leggings", "Boots");
+    private final List<String> PROTECTION_TYPES = Lists.newArrayList("Protection", "Fire Protection", "Projectile Protection", "Blast Protection", "Feather Falling");
 
-    public ArrayTable<String, String, BigDecimal> setArmorTableValues()
+    private ArrayTable<String, String, BigDecimal> setArmorTableValues()
     {
         ArrayTable<String, String, BigDecimal> armorTable = ArrayTable.create(MATERIALS, ARMOR_PIECES);
 
@@ -84,7 +110,7 @@ public class CalculatorDisplayController
         return armorTable;
     }
 
-    public BigDecimal[] getArmorTableValues(ChoiceBox<String> helmetMaterial, ChoiceBox<String> chestplateMaterial, ChoiceBox<String> leggingsMaterial, ChoiceBox<String> bootsMaterial)
+    private BigDecimal[] getArmorTableValues(ChoiceBox<String> helmetMaterial, ChoiceBox<String> chestplateMaterial, ChoiceBox<String> leggingsMaterial, ChoiceBox<String> bootsMaterial)
     {
         String helmetIndex = helmetMaterial.getValue();
         String chestplateIndex = chestplateMaterial.getValue();
@@ -96,17 +122,41 @@ public class CalculatorDisplayController
         BigDecimal leggingsValue = finalArmorTable.get(leggingsIndex, ARMOR_PIECES.get(2));
         BigDecimal bootsValue = finalArmorTable.get(bootsIndex, ARMOR_PIECES.get(3));
 
-        /*
-        System.out.println(chestplateValue);
-        System.out.println(finalArmorTable.get(MATERIALS.get(0), ARMOR_PIECES.get(0)));
-        System.out.println(finalArmorTable.get("Leather", "Helmet"));
-        System.out.println(helmetValue);
-        System.out.println(finalArmorTable.at(0,0));
-        */
-
         BigDecimal[] armorValues = {helmetValue, chestplateValue, leggingsValue, bootsValue};
         return armorValues;
     }
+
+    private ArrayTable<String, String, Double> setProtectionEPFs()
+    {
+        ArrayTable<String, String, Double> protectionTable = ArrayTable.create(PROTECTION_LEVELS, PROTECTION_TYPES);
+
+        //Protection EPF value based on Protection level
+        protectionTable.put(PROTECTION_LEVELS.get(0), PROTECTION_TYPES.get(0), 0.0);
+        protectionTable.put(PROTECTION_LEVELS.get(1), PROTECTION_TYPES.get(0), Math.floor((6 + 1 ^ 2) * PROTECTION_MODIFIER.doubleValue() / 3));
+        protectionTable.put(PROTECTION_LEVELS.get(2), PROTECTION_TYPES.get(0), Math.floor((6 + 2 ^ 2) * PROTECTION_MODIFIER.doubleValue() / 3));
+        protectionTable.put(PROTECTION_LEVELS.get(3), PROTECTION_TYPES.get(0), Math.floor((6 + 3 ^ 2) * PROTECTION_MODIFIER.doubleValue() / 3));
+        protectionTable.put(PROTECTION_LEVELS.get(4), PROTECTION_TYPES.get(0), Math.floor((6 + 4 ^ 2) * PROTECTION_MODIFIER.doubleValue() / 3));
+        protectionTable.put(PROTECTION_LEVELS.get(5), PROTECTION_TYPES.get(0), Math.floor((6 + 5 ^ 2) * PROTECTION_MODIFIER.doubleValue() / 3));
+
+        return protectionTable;
+    }
+
+    private BigDecimal[] getProtectionReduction(ChoiceBox<String> helmetProtection, ChoiceBox<String> chestplateProtection, ChoiceBox<String> leggingsProtection, ChoiceBox<String> bootsProtection)
+    {
+        Double helmetProtectionEPF = finalProtectionTable.get(helmetProtection.getValue(), PROTECTION_TYPES.get(0));
+        Double chestplateProtectionEPF = finalProtectionTable.get(chestplateProtection.getValue(), PROTECTION_TYPES.get(0));
+        Double leggingsProtectionEPF = finalProtectionTable.get(leggingsProtection.getValue(), PROTECTION_TYPES.get(0));
+        Double bootsProtectionEPF = finalProtectionTable.get(bootsProtection.getValue(), PROTECTION_TYPES.get(0));
+
+        Double totalProtectionEPF = helmetProtectionEPF + chestplateProtectionEPF + leggingsProtectionEPF + bootsProtectionEPF;
+
+        BigDecimal protectionMin = new BigDecimal(totalProtectionEPF).multiply(MIN_MODIFIER).multiply(new BigDecimal(4));
+        BigDecimal protectionMax = new BigDecimal(totalProtectionEPF).multiply(MAX_MODIFIER).multiply(new BigDecimal(4));
+
+        BigDecimal[] protectionMinMax = {protectionMin, protectionMax};
+        return protectionMinMax;
+    }
+
 
     public CalculatorDisplayController()
     {
@@ -117,6 +167,7 @@ public class CalculatorDisplayController
     private void initialize()
     {
         ObservableList<String> materialsList = FXCollections.observableArrayList(MATERIALS);
+        ObservableList<String> levelList = FXCollections.observableArrayList(PROTECTION_LEVELS);
 
         helmetMaterial.setItems(materialsList);
         helmetMaterial.getSelectionModel().select(0);
@@ -130,27 +181,48 @@ public class CalculatorDisplayController
         bootsMaterial.setItems(materialsList);
         bootsMaterial.getSelectionModel().select(0);
 
-        finalArmorTable= setArmorTableValues();
+        helmetProtection.setItems(levelList);
+        helmetProtection.getSelectionModel().select(0);
+
+        chestplateProtection.setItems(levelList);
+        chestplateProtection.getSelectionModel().select(0);
+
+        leggingsProtection.setItems(levelList);
+        leggingsProtection.getSelectionModel().select(0);
+
+        bootsProtection.setItems(levelList);
+        bootsProtection.getSelectionModel().select(0);
+
+        finalArmorTable = setArmorTableValues();
+        finalProtectionTable = setProtectionEPFs();
     }
 
     @FXML
     private void calculateResults()
     {
+        //Arrays that are used to get Armor Protection & EnchantmentProtection
         BigDecimal[] armorValues = getArmorTableValues(helmetMaterial, chestplateMaterial, leggingsMaterial, bootsMaterial);
+        BigDecimal[] protectionReduction = getProtectionReduction(helmetProtection, chestplateProtection, leggingsProtection, bootsProtection);
 
+        //Methods that set all values regarding chosen armor pieces and their respective material
         armor.setHelmetProtection(armorValues[0]);
         armor.setChestplateProtection(armorValues[1]);
         armor.setLeggingsProtection(armorValues[2]);
         armor.setBootsProtection(armorValues[3]);
 
+        //Sets the value that is used in the result display
+        armor.setArmorProection(armorValues[0].add(armorValues[1].add(armorValues[2].add(armorValues[3]))));
 
-        System.out.println(armor.getHelmetProtection());
-/*
-        BigDecimal topHalf = suit.getHelmetProtection().add(suit.getChestplateProtection());
-        BigDecimal bottomHalf = suit.getLeggingsProtection().add(suit.getBootsProtection());
-        BigDecimal bothHalves = topHalf.add(bottomHalf);
-*/
-        main.showCalculatorResults(armor);
+        //Methods that take the minimum and maximum amount that the protection enchantment can provide and averages them for the result
+        BigDecimal unprotectedValue = BigDecimal.ONE.subtract(armor.getArmorProtection());
+        BigDecimal protectionReductionMin = unprotectedValue.multiply(protectionReduction[0]).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal protectionReductionMax = unprotectedValue.multiply(protectionReduction[1]).setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal averageProtectionReduction = protectionReductionMin.add(protectionReductionMax).divide(new BigDecimal(2).setScale(2, RoundingMode.HALF_UP));
+
+        //Sets the value that is used in the result display
+        protection.setProtectionEPF(averageProtectionReduction);
+
+        main.showCalculatorResults(armor, protection);
     }
 
     public void setMainApp(MainApp main)

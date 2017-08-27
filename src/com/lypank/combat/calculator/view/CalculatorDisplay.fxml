@@ -43,6 +43,10 @@
             <ChoiceBox fx:id="chestplateMaterial" layoutX="125.0" layoutY="57.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
             <ChoiceBox fx:id="leggingsMaterial" layoutX="125.0" layoutY="97.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
             <ChoiceBox fx:id="bootsMaterial" layoutX="125.0" layoutY="137.0" prefHeight="31.0" prefWidth="100.0" AnchorPane.leftAnchor="125.0" />
+            <ChoiceBox fx:id="helmetProtection" layoutX="240.0" layoutY="17.0" prefHeight="31.0" prefWidth="40.0" />
+            <ChoiceBox fx:id="chestplateProtection" layoutX="240.0" layoutY="57.0" prefHeight="31.0" prefWidth="40.0" />
+            <ChoiceBox fx:id="leggingsProtection" layoutX="240.0" layoutY="97.0" prefHeight="31.0" prefWidth="40.0" />
+            <ChoiceBox fx:id="bootsProtection" layoutX="240.0" layoutY="137.0" prefHeight="31.0" prefWidth="40.0" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="200.0" prefWidth="520.0" AnchorPane.topAnchor="300.0" />
