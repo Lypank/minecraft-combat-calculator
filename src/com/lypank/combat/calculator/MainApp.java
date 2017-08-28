@@ -2,6 +2,7 @@ package com.lypank.combat.calculator;
 
 import com.lypank.combat.calculator.model.Armor;
 import com.lypank.combat.calculator.model.Protection;
+import com.lypank.combat.calculator.model.Resistance;
 import com.lypank.combat.calculator.view.CalculatorDisplayController;
 import com.lypank.combat.calculator.view.CalculatorResultsController;
 import javafx.application.Application;
@@ -98,7 +99,7 @@ public class MainApp extends Application
         }
     }
 
-    public void showCalculatorResults(Armor armor, Protection protection)
+    public void showCalculatorResults(Armor armor, Protection protection, Resistance resistance)
     {
         try
         {
@@ -117,7 +118,8 @@ public class MainApp extends Application
             controller.setResultsStage(resultsStage);
             controller.setDR(armor);
             controller.setEnchantmentDR(protection);
-            controller.setTotalDR(armor, protection);
+            controller.setResistanceDR(resistance);
+            controller.setTotalDR(armor, protection, resistance);
 
             resultsStage.showAndWait();
         }
