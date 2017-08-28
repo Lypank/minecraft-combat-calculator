@@ -4,6 +4,7 @@ import com.google.common.collect.ArrayTable;
 import com.google.common.collect.Lists;
 import com.lypank.combat.calculator.MainApp;
 import com.lypank.combat.calculator.model.Armor;
+import com.lypank.combat.calculator.model.Blocking;
 import com.lypank.combat.calculator.model.Protection;
 import com.lypank.combat.calculator.model.Resistance;
 import javafx.collections.FXCollections;
@@ -50,6 +51,7 @@ public class CalculatorDisplayController
     private Armor armor = new Armor(null, null, null, null);
     private Protection protection = new Protection(null);
     private Resistance resistance = new Resistance(null);
+    private Blocking stance = new Blocking(null);
 
     //Array Tables that are used in the initialize method
     private ArrayTable<String, String, BigDecimal> finalArmorTable;
@@ -57,6 +59,7 @@ public class CalculatorDisplayController
 
     //Hashtables
     private Hashtable<String, BigDecimal> finalResistanceValues;
+    private Hashtable<String, BigDecimal> finalBlockingValues;
 
     // Armor Types with the included value of that Armor
     // Armor is structured as [0] = Helmet [1] = Chestplate [2] = Leggings [3] = Boots
@@ -66,13 +69,7 @@ public class CalculatorDisplayController
     private final BigDecimal[] IRON = {new BigDecimal(0.08), new BigDecimal(0.24), new BigDecimal(0.20), new BigDecimal(0.08)};
     private final BigDecimal[] DIAMOND = {new BigDecimal(0.12), new BigDecimal(0.32), new BigDecimal(0.24), new BigDecimal(0.12)};
 
-    // Protection Type Modifiers
-    // Available Protection Levels
-    private final BigDecimal PROTECTION_MODIFIER = new BigDecimal(0.75);
-    final double FIRE_PROTECTION_MODIFIER = 1.25;
-    final double PROJECTILE_PROTECTION_MODIFER = 1.5;
-    final double BLAST_PROTECTION_MODIFIER = 1.5;
-    final double FEATHER_FALLING_MODIFIER = 2.5;
+    // Protection Minimum and Maximum Modifiers
     private final BigDecimal MIN_MODIFIER = new BigDecimal(0.5);
     private final BigDecimal MAX_MODIFIER = new BigDecimal(1);
 
@@ -82,8 +79,9 @@ public class CalculatorDisplayController
     private final List<String> PROTECTION_TYPES = Lists.newArrayList("Protection", "Fire Protection", "Projectile Protection", "Blast Protection", "Feather Falling");
     private final List<String> PROTECTION_LEVELS = Lists.newArrayList("~", "I", "II", "III", "IV", "V");
     private final List<String> RESISTANCE_LEVELS = Lists.newArrayList("~", "I", "II", "III", "IV");
+    private final List<String> BLOCKING_OPTIONS = Lists.newArrayList("True", "False");
 
-    //Armor
+    //Armor Tables based on two "keys" to retrieve armor value
     private ArrayTable<String, String, BigDecimal> setArmorTableValues()
     {
         ArrayTable<String, String, BigDecimal> armorTable = ArrayTable.create(MATERIALS, ARMOR_PIECES);
@@ -127,6 +125,7 @@ public class CalculatorDisplayController
         return armorTable;
     }
 
+    //The method that returns what each choice made by the user is equal to
     private BigDecimal[] getArmorTableValues(ChoiceBox<String> helmetMaterial, ChoiceBox<String> chestplateMaterial, ChoiceBox<String> leggingsMaterial, ChoiceBox<String> bootsMaterial)
     {
         String helmetIndex = helmetMaterial.getValue();
@@ -143,7 +142,7 @@ public class CalculatorDisplayController
         return armorValues;
     }
 
-    //Protection Enchant
+    //Protection Enchant EPFs
     private ArrayTable<String, String, Double> setProtectionEPFs()
     {
         ArrayTable<String, String, Double> protectionTable = ArrayTable.create(PROTECTION_LEVELS, PROTECTION_TYPES);
@@ -195,6 +194,21 @@ public class CalculatorDisplayController
         return resistanceValue;
     }
 
+    private Hashtable<String, BigDecimal> setBlocking()
+    {
+        Hashtable<String, BigDecimal> blockingHash = new Hashtable<>();
+        blockingHash.put(BLOCKING_OPTIONS.get(0), new BigDecimal(0.5));
+        blockingHash.put(BLOCKING_OPTIONS.get(1), BigDecimal.ZERO);
+
+        return blockingHash;
+    }
+
+    private BigDecimal getBlocking(ChoiceBox<String> blocking)
+    {
+        BigDecimal blockingValue = finalBlockingValues.get(blocking.getValue());
+
+        return blockingValue;
+    }
 
     public CalculatorDisplayController()
     {
@@ -207,6 +221,7 @@ public class CalculatorDisplayController
         ObservableList<String> materialsList = FXCollections.observableArrayList(MATERIALS);
         ObservableList<String> levelList = FXCollections.observableArrayList(PROTECTION_LEVELS);
         ObservableList<String> resistanceLevels = FXCollections.observableArrayList(RESISTANCE_LEVELS);
+        ObservableList<String> blockingOptions = FXCollections.observableArrayList(BLOCKING_OPTIONS);
 
         helmetMaterial.setItems(materialsList);
         helmetMaterial.getSelectionModel().select(0);
@@ -235,9 +250,13 @@ public class CalculatorDisplayController
         resistanceChoice.setItems(resistanceLevels);
         resistanceChoice.getSelectionModel().select(0);
 
+        blocking.setItems(blockingOptions);
+        blocking.getSelectionModel().select(0);
+
         finalArmorTable = setArmorTableValues();
         finalProtectionTable = setProtectionEPFs();
         finalResistanceValues = setResistanceValues();
+        finalBlockingValues = setBlocking();
     }
 
     @FXML
@@ -247,6 +266,7 @@ public class CalculatorDisplayController
         BigDecimal[] armorValues = getArmorTableValues(helmetMaterial, chestplateMaterial, leggingsMaterial, bootsMaterial);
         BigDecimal[] protectionReduction = getProtectionReduction(helmetProtection, chestplateProtection, leggingsProtection, bootsProtection);
         BigDecimal resistanceLevel = getResistanceValue(resistanceChoice);
+        BigDecimal isBlocking = getBlocking(blocking);
 
         //Methods that set all values regarding chosen armor pieces and their respective material
         armor.setHelmetProtection(armorValues[0]);
@@ -264,7 +284,13 @@ public class CalculatorDisplayController
         BigDecimal resistanceReduction = unprotectedValue.multiply(resistanceLevel);
 
         //BigDecimal that stores how much the player is unprotected for after armor and resistance is applied
-        BigDecimal unprotectedEnchants = unprotectedValue.subtract(resistanceReduction);
+        BigDecimal unprotectedBlocking = unprotectedValue.subtract(resistanceReduction);
+
+        //BigDecimal that stores how much the player is protected for by blocking
+        BigDecimal blockingReduction = unprotectedBlocking.multiply(isBlocking);
+
+        //BigDecimal that stores how much the player is unprotected for after armor, resistance, and blocking is applied
+        BigDecimal unprotectedEnchants = unprotectedBlocking.subtract(blockingReduction);
 
         //Methods that take the minimum and maximum amount that the protection enchantment can provide and averages them for the result
         BigDecimal protectionReductionMin = unprotectedEnchants.multiply(protectionReduction[0]).setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -274,8 +300,9 @@ public class CalculatorDisplayController
         //Sets the value that is used in the result display
         protection.setProtectionEPF(averageProtectionReduction);
         resistance.setResistanceValue(resistanceReduction);
+        stance.setIsBlocking(blockingReduction);
 
-        main.showCalculatorResults(armor, protection, resistance);
+        main.showCalculatorResults(armor, protection, resistance, stance);
     }
 
     public void setMainApp(MainApp main)

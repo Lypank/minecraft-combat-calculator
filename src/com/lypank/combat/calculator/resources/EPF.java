@@ -1,4 +1,4 @@
-package com.lypank.combat.calculator.formulas;
+package com.lypank.combat.calculator.resources;
 
 import java.math.BigDecimal;
 import java.util.Scanner;
